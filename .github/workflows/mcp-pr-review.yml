@@ -24,13 +24,13 @@ jobs:
         run: |
           echo "🔍 Analyzing PR #${{ github.event.pull_request.number }}..."
           
-          response=$(curl -s -X POST "$MCP_URL/pr-review" \
+          response=$(curl -s --max-time 10 -X POST "$MCP_URL/pr-review" \
             -H "Content-Type: application/json" \
             -H "ngrok-skip-browser-warning: true" \
             -d "{
-              \"repository\": \"${{ github.event.repository.name }}\",
+              \"repository\": \"mcp\",
               \"pr_number\": ${{ github.event.pull_request.number }}
-            }")
+            }") || response="{}"
           
           echo "Response: $response"
           
