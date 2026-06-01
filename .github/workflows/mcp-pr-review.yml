@@ -1,0 +1,61 @@
+name: 🤖 MCP PR Reviewer
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔍 Analyze PR via MCP
+        id: pr_analysis
+        env:
+          MCP_URL: ${{ secrets.MCP_SERVER_URL }}
+        run: |
+          echo "🔍 Analyzing PR #${{ github.event.pull_request.number }}..."
+          
+          response=$(curl -s -X POST "$MCP_URL/pr-review" \
+            -H "Content-Type: application/json" \
+            -H "ngrok-skip-browser-warning: true" \
+            -d "{
+              \"repository\": \"${{ github.event.repository.name }}\",
+              \"pr_number\": ${{ github.event.pull_request.number }}
+            }")
+          
+          echo "Response: $response"
+          
+          score=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin).get('score', 0))" 2>/dev/null || echo "0")
+          action=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin).get('action_taken', 'comment'))" 2>/dev/null || echo "comment")
+          
+          echo "score=$score" >> $GITHUB_OUTPUT
+          echo "action=$action" >> $GITHUB_OUTPUT
+          
+          echo "✅ Score: $score/100 | Action: $action"
+
+      - name: 📊 Set PR Status
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const score = parseInt('${{ steps.pr_analysis.outputs.score }}');
+            const action = '${{ steps.pr_analysis.outputs.action }}';
+            
+            console.log(`Score: ${score}/100 | Action: ${action}`);
+            
+            if (score >= 80) {
+              console.log('✅ PR bien structurée !');
+            } else if (score >= 60) {
+              console.log('⚠️ PR à améliorer');
+            } else {
+              console.log('❌ PR non conforme - changes requested');
+            }
