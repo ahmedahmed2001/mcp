@@ -1,52 +1,55 @@
-# mcp
+# MCP
 
-## 📖 Description
+## Description
 
-c'est une repo de test pour le projet MCP
+Repository for the MCP project. It contains the source code, configuration files, and documentation necessary to build, test, and deploy the application.
 
-## 🚀 À propos
+## Structure
 
-Ce projet a été automatiquement analysé et contient :
-- **25** fichiers
-- Langage principal : **Python**
-- Dernière mise à jour : 2026-11-27
+- `backend/` – server‑side code and APIs.
+- `frontend/` – client‑side application.
+- `services/` – auxiliary services and Docker configurations.
+- `scripts/` – automation scripts for CI/CD.
+- `tests/` – unit and integration test suites.
+- `config/` – configuration files.
+- `Dockerfile` – container definition.
+- `package.json` – Node.js dependencies.
+- `requirements.txt` – Python dependencies.
 
-## 📂 Structure
+## Installation
 
-Types de fichiers détectés :
-- `.md` : 2 fichier(s)
-- `.yml` : 2 fichier(s)
-- `.py` : 9 fichier(s)
-- `.txt` : 2 fichier(s)
-- `.json` : 2 fichier(s)
-- `.yaml` : 1 fichier(s)
-- `.js` : 1 fichier(s)
-- `.html` : 1 fichier(s)
-- `.css` : 1 fichier(s)
-- `.sh` : 2 fichier(s)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ahmedahmed2001/mcp.git
+   ```
+2. Install backend dependencies:
+   ```bash
+   cd mcp/backend
+   pip install -r requirements.txt
+   ```
+3. Install frontend dependencies:
+   ```bash
+   cd ../frontend
+   npm install
+   ```
 
-## 🛠️ Installation
+## Usage
 
-```bash
-# Cloner le repository
-git clone https://github.com/ahmedahmed2001/mcp.git
-cd mcp
+- Run the backend:
+  ```bash
+  cd backend
+  python main.py
+  ```
+- Run the frontend:
+  ```bash
+  cd frontend
+  npm start
+  ```
 
-# Instructions d'installation à compléter
-```
+## Contributing
 
-## 📝 Utilisation
+Contributions are welcome. Please follow the standard pull‑request workflow and ensure that all tests pass before merging.
 
-Documentation à venir.
+## License
 
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
-
-## 📄 Licence
-
-À définir.
-
----
-
-*README généré automatiquement le 2026-11-27*
+This project is licensed under the MIT License.
