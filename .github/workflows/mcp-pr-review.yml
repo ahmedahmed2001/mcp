@@ -47,15 +47,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const score = parseInt('${{ steps.pr_analysis.outputs.score }}');
+             const score = parseInt('${{ steps.pr_analysis.outputs.score }}');
             const action = '${{ steps.pr_analysis.outputs.action }}';
-            
             console.log(`Score: ${score}/100 | Action: ${action}`);
             
-            if (score >= 80) {
-              console.log('✅ PR bien structurée !');
-            } else if (score >= 60) {
-              console.log('⚠️ PR à améliorer');
-            } else {
-              console.log('❌ PR non conforme - changes requested');
-            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `## 🤖 MCP Agent — PR Review\n\n**Score : ${score}/100**\n\nConsultez les logs pour le rapport complet.`
+            });
